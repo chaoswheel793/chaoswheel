@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#000000"/>
+  <meta name="description" content="Chaos Wheel: Random decision spinner for life's wild dilemmas. Spin once, change everything.">
+  <meta name="keywords" content="chaos wheel, random decision, spin the wheel, YOLO, life advice, dare, challenge">
+  <meta name="robots" content="index, follow">
+  <title>Chaos Wheel — Spin for Wild Decisions</title>
+  <link rel="manifest" href="data:application/manifest+json,{
+    \"name\": \"Chaos Wheel\",
+    \"short_name\": \"Chaos\",
+    \"start_url\": \".\",
+    \"display\": \"standalone\",
+    \"background_color\": \"#000\",
+    \"theme_color\": \"#ff0044\",
+    \"icons\": [{
+      \"src\": \"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff0044'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='40' fill='white' text-anchor='middle'%3E?%3C/text%3E%3C/svg%3E\",
+      \"sizes\": \"192x192\",
+      \"type\": \"image/svg+xml\"
+    }]
+  }"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; }
+    h1 { font-size:36px; margin:10px; text-shadow:0 0 15px #ff0044; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { text-shadow:0 0 15px #ff0044; } 50% { text-shadow:0 0 30px #ff0044,0 0 40px #ff0044; } }
+    #wheel { width:200px; height:200px; margin:20px; filter:drop-shadow(0 0 20px #39ff14); }
+    #spin { background:#ff0044; color:white; border:none; padding:15px 40px; font-size:28px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:20px; }
+    #spin:hover { transform:scale(1.1); box-shadow:0 0 30px #ff0044; }
+    #result { margin:20px; font-size:24px; min-height:60px; opacity:0; transition:opacity 0.5s; }
+    #result.show { opacity:1; }
+    #outcome { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
+    .disclaimer { margin:20px; font-size:14px; max-width:300px; background:#111; padding:15px; border-radius:10px; border:1px solid #333; }
+    .share { margin:20px; display:flex; gap:10px; }
+    .share button { background:#333; color:white; padding:10px 15px; border:none; border-radius:20px; cursor:pointer; font-size:14px; }
+    .share button:hover { background:#555; }
+    .unlock { margin:20px; }
+    .unlock button { background:#ffd700; color:black; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <h1>CHAOS WHEEL</h1>
+  <img id="wheel" src="https://media.giphy.com/media/l0HlRnAWXxn0MhKLK/giphy.gif" alt="Spinning Wheel" loop>
+  <button id="spin">SPIN</button>
+  <div id="result">
+    <div id="prompt"></div>
+    <div id="outcome"></div>
+  </div>
+  <div class="disclaimer">
+    <strong>⚠️ LEGAL DISCLAIMER</strong><br>
+    Entertainment purposes only. 18+. All spins are fictional. No liability for actions taken. You assume full responsibility. Creator not responsible for outcomes, emotional distress, or damages. Use at your own risk. By spinning, you agree to these terms.
+  </div>
+  <div class="share">
+    <button onclick="share('x')">Share on X</button>
+    <button onclick="share('reddit')">Share on Reddit</button>
+    <button onclick="share('tiktok')">Share on TikTok</button>
+  </div>
+  <div class="unlock">
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+      <input type="hidden" name="cmd" value="_s-xclick">
+      <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
+      <button type="submit">UNLOCK UNLIMITED ($2.99)</button>
+    </form>
+  </div>
+
+  <script>
+    const prompts = [
+      "Sell my car for a pet rock empire?|YOLO",
+      "Bungee off my desk for a raise?|Nope",
+      "Confess snack crimes to roommate?|Plot Twist",
+      "Start Microwave Symphony band?|Friend Veto",
+      "Rename WiFi something embarrassing?|Rewind",
+      "Swap salaries with my pet?|YOLO",
+      "Tattoo favorite emoji on knuckle?|Nope",
+      "Live tweet grocery drama?|Plot Twist",
+      "Propose via pizza delivery?|Friend Veto",
+      "Invest rent in glow socks?|Rewind"
+    ];
+
+    const spinBtn = document.getElementById('spin');
+    const resultDiv = document.getElementById('result');
+    const promptDiv = document.getElementById('prompt');
+    const outcomeDiv = document.getElementById('outcome');
+
+    spinBtn.addEventListener('click', () => {
+      const [p, o] = prompts[Math.floor(Math.random() * prompts.length)].split('|');
+      promptDiv.textContent = p;
+      outcomeDiv.textContent = o;
+      resultDiv.classList.remove('show');
+      setTimeout(() => resultDiv.classList.add('show'), 100);
+    });
+
+    function share(platform) {
+      const p = promptDiv.textContent || "Spin for chaos!";
+      const o = outcomeDiv.textContent || "Try it!";
+      const url = window.location.href;
+      const message = `I just spun "${p}" → ${o} on Chaos Wheel! ${url} #ChaosWheel`;
+      let shareUrl = '';
+      if (platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+      if (platform === 'reddit') shareUrl = `https://www.reddit.com/submit?title=${encodeURIComponent(p)}&text=${encodeURIComponent(message)}`;
+      if (platform === 'tiktok') shareUrl = `https://www.tiktok.com/upload?text=${encodeURIComponent(message)}`;
+      window.open(shareUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
