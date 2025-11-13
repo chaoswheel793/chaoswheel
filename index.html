@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Type your life decision, get a random answer with emojis. YOLO or Nope?">
+  <meta name="description" content="Chaos Wheel: Ask any life question, get a random funny answer with emojis!">
   <meta name="keywords" content="chaos wheel, random decision, life advice, funny answers, emoji reactions">
   <meta name="robots" content="index, follow">
   <title>Chaos Wheel — Ask Anything</title>
@@ -94,4 +94,38 @@
       { text: "Absolutely not", emoji: "❌" }
     ];
 
-    const spin
+    const spinBtn = document.getElementById('spin');
+    const input = document.getElementById('input');
+    const resultDiv = document.getElementById('result');
+    const promptDiv = document.getElementById('prompt');
+    const emojiDiv = document.getElementById('emoji');
+    const outcomeDiv = document.getElementById('outcome');
+
+    spinBtn.addEventListener('click', () => {
+      const question = input.value.trim() || "Spin for chaos!";
+      const answer = answers[Math.floor(Math.random() * answers.length)];
+      
+      promptDiv.textContent = question;
+      emojiDiv.textContent = answer.emoji;
+      emojiDiv.className = "emoji";
+      outcomeDiv.textContent = answer.text;
+      
+      resultDiv.classList.remove('show');
+      setTimeout(() => resultDiv.classList.add('show'), 100);
+    });
+
+    function share(platform) {
+      const q = input.value.trim() || "a wild decision";
+      const a = outcomeDiv.textContent || "chaos";
+      const e = emojiDiv.textContent || "🎲";
+      const url = window.location.href;
+      const message = `I asked Chaos Wheel: "${q}" → ${e} ${a}! ${url} #ChaosWheel`;
+      let shareUrl = '';
+      if (platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+      if (platform === 'reddit') shareUrl = `https://www.reddit.com/submit?title=${encodeURIComponent(q)}&text=${encodeURIComponent(message)}`;
+      if (platform === 'tiktok') shareUrl = `https://www.tiktok.com/upload?text=${encodeURIComponent(message)}`;
+      window.open(shareUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
