@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Ask any life question, get real advice + funny twist with emojis!">
+  <meta name="description" content="Chaos Wheel: Ask any life question, get real advice + funny twist with emojis! 3 free spins, then $0.99 for life.">
   <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions, emoji reactions">
   <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — Real + Funny Advice</title>
+  <title>Chaos Wheel — 3 Free Spins!</title>
   <link rel="manifest" href="data:application/manifest+json,{
     \"name\": \"Chaos Wheel\",
     \"short_name\": \"Chaos\",
@@ -23,32 +23,34 @@
   }"/>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; overflow-y:auto; padding:20px 10px; }
-    h1 { font-size:36px; margin:10px; text-shadow:0 0 15px #ff0044; animation:pulse 2s infinite; }
-    @keyframes pulse { 0%,100% { text-shadow:0 0 15px #ff0044; } 50% { text-shadow:0 0 30px #ff0044,0 0 40px #ff0044; } }
-    #wheel { width:200px; height:200px; margin:20px; filter:drop-shadow(0 0 20px #39ff14); }
-    #input { width:90%; max-width:350px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:15px; }
-    #spin { background:#ff0044; color:white; border:none; padding:15px 40px; font-size:28px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:10px; }
+    body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; overflow-y:auto; padding:15px 10px; }
+    h1 { font-size:32px; margin:10px; text-shadow:0 0 15px #ff0044; }
+    .wheel { font-size:60px; margin:10px; animation:spin 2s linear infinite; }
+    @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    #input { width:90%; max-width:320px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:10px; }
+    #spin { background:#ff0044; color:white; border:none; padding:12px 35px; font-size:24px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:10px; }
     #spin:hover { transform:scale(1.1); box-shadow:0 0 30px #ff0044; }
-    #result { margin:20px; font-size:24px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:400px; }
+    #result { margin:15px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
     #result.show { opacity:1; }
     #real { font-size:18px; margin:5px; color:#ccc; }
     #funny { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
-    .emoji { font-size:60px; margin:10px; animation:bounce 1s; }
-    @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-20px); } }
-    .disclaimer { margin:20px 0; font-size:12px; width:95%; max-width:500px; background:#111; padding:8px 12px; border-radius:8px; border:1px solid #333; line-height:1.4; }
-    .share { margin:10px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-    .share button { background:#333; color:white; padding:8px 12px; border:none; border-radius:20px; cursor:pointer; font-size:12px; }
+    .emoji { font-size:50px; margin:8px; animation:bounce 1s; }
+    @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-15px); } }
+    .spins { margin:10px; font-size:16px; color:#aaa; }
+    .disclaimer { margin:15px 0; font-size:11px; width:95%; max-width:500px; background:#111; padding:8px; border-radius:8px; border:1px solid #333; line-height:1.3; }
+    .share { margin:8px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .share button { background:#333; color:white; padding:6px 10px; border:none; border-radius:20px; cursor:pointer; font-size:11px; }
     .share button:hover { background:#555; }
-    .unlock { margin:10px; }
-    .unlock button { background:#ffd700; color:black; padding:8px 15px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; font-size:14px; }
+    .unlock { margin:8px; }
+    .unlock button { background:#ffd700; color:black; padding:6px 12px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; font-size:13px; }
   </style>
 </head>
 <body>
   <h1>CHAOS WHEEL</h1>
-  <img id="wheel" src="https://media.giphy.com/media/l0HlRnAWXxn0MhKLK/giphy.gif" alt="Spinning Wheel" loop>
+  <div class="wheel">🎡</div>
   <input id="input" type="text" placeholder="Ask your life decision..." />
   <button id="spin">SPIN</button>
+  <div class="spins">Spins left: <span id="spins">3</span>/3 (free)</div>
   <div id="result">
     <div id="prompt"></div>
     <div id="real"></div>
@@ -64,14 +66,18 @@
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
       <input type="hidden" name="cmd" value="_s-xclick">
       <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
-      <button type="submit">UNLOCK ($2.99)</button>
+      <button type="submit">UNLIMITED ($0.99)</button>
     </form>
   </div>
   <div class="disclaimer">
-    <strong>⚠️ DISCLAIMER:</strong> Entertainment only. 18+. All answers are fictional. No liability. You assume full responsibility. Use at your own risk.
+    <strong>⚠️ DISCLAIMER:</strong> Entertainment only. 18+. All answers fictional. No liability. Use at your own risk.
   </div>
 
   <script>
+    let spinsLeft = 3;
+    const spinsDisplay = document.getElementById('spins');
+    const unlockBtn = document.querySelector('.unlock button');
+
     const answers = [
       { real: "Yes, but plan carefully.", funny: "YOLO! Jump in blind!", emoji: "🚀" },
       { real: "No, think it through.", funny: "Nope — run away screaming!", emoji: "🚫" },
@@ -104,6 +110,11 @@
     const funnyDiv = document.getElementById('funny');
 
     spinBtn.addEventListener('click', () => {
+      if (spinsLeft <= 0) {
+        alert("You're out of free spins! Unlock for $0.99 to continue.");
+        return;
+      }
+
       const question = input.value.trim() || "Spin for chaos!";
       const answer = answers[Math.floor(Math.random() * answers.length)];
       
@@ -115,6 +126,12 @@
       
       resultDiv.classList.remove('show');
       setTimeout(() => resultDiv.classList.add('show'), 100);
+
+      spinsLeft--;
+      spinsDisplay.textContent = spinsLeft;
+      if (spinsLeft === 0) {
+        unlockBtn.textContent = "UNLOCK $0.99";
+      }
     });
 
     function share(platform) {
