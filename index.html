@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Random decision spinner for life's wild dilemmas. Spin once, change everything.">
-  <meta name="keywords" content="chaos wheel, random decision, spin the wheel, YOLO, life advice, dare, challenge">
+  <meta name="description" content="Chaos Wheel: Type your life decision, get a random answer with emojis. YOLO or Nope?">
+  <meta name="keywords" content="chaos wheel, random decision, life advice, funny answers, emoji reactions">
   <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — Spin for Wild Decisions</title>
+  <title>Chaos Wheel — Ask Anything</title>
   <link rel="manifest" href="data:application/manifest+json,{
     \"name\": \"Chaos Wheel\",
     \"short_name\": \"Chaos\",
@@ -27,11 +27,14 @@
     h1 { font-size:36px; margin:10px; text-shadow:0 0 15px #ff0044; animation:pulse 2s infinite; }
     @keyframes pulse { 0%,100% { text-shadow:0 0 15px #ff0044; } 50% { text-shadow:0 0 30px #ff0044,0 0 40px #ff0044; } }
     #wheel { width:200px; height:200px; margin:20px; filter:drop-shadow(0 0 20px #39ff14); }
-    #spin { background:#ff0044; color:white; border:none; padding:15px 40px; font-size:28px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:20px; }
+    #input { width:80%; max-width:300px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:15px; }
+    #spin { background:#ff0044; color:white; border:none; padding:15px 40px; font-size:28px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:10px; }
     #spin:hover { transform:scale(1.1); box-shadow:0 0 30px #ff0044; }
     #result { margin:20px; font-size:24px; min-height:60px; opacity:0; transition:opacity 0.5s; }
     #result.show { opacity:1; }
     #outcome { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
+    .emoji { font-size:60px; margin:10px; animation:bounce 1s; }
+    @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-20px); } }
     .disclaimer { margin:20px; font-size:14px; max-width:300px; background:#111; padding:15px; border-radius:10px; border:1px solid #333; }
     .share { margin:20px; display:flex; gap:10px; }
     .share button { background:#333; color:white; padding:10px 15px; border:none; border-radius:20px; cursor:pointer; font-size:14px; }
@@ -43,14 +46,16 @@
 <body>
   <h1>CHAOS WHEEL</h1>
   <img id="wheel" src="https://media.giphy.com/media/l0HlRnAWXxn0MhKLK/giphy.gif" alt="Spinning Wheel" loop>
+  <input id="input" type="text" placeholder="Ask your life decision..." />
   <button id="spin">SPIN</button>
   <div id="result">
     <div id="prompt"></div>
+    <div id="emoji"></div>
     <div id="outcome"></div>
   </div>
   <div class="disclaimer">
     <strong>⚠️ LEGAL DISCLAIMER</strong><br>
-    Entertainment purposes only. 18+. All spins are fictional. No liability for actions taken. You assume full responsibility. Creator not responsible for outcomes, emotional distress, or damages. Use at your own risk. By spinning, you agree to these terms.
+    Entertainment only. 18+. All spins are fictional. No liability for actions taken. You assume full responsibility. Creator not responsible for outcomes, emotional distress, or damages. Use at your own risk. By spinning, you agree to these terms.
   </div>
   <div class="share">
     <button onclick="share('x')">Share on X</button>
@@ -66,43 +71,27 @@
   </div>
 
   <script>
-    const prompts = [
-      "Sell my car for a pet rock empire?|YOLO",
-      "Bungee off my desk for a raise?|Nope",
-      "Confess snack crimes to roommate?|Plot Twist",
-      "Start Microwave Symphony band?|Friend Veto",
-      "Rename WiFi something embarrassing?|Rewind",
-      "Swap salaries with my pet?|YOLO",
-      "Tattoo favorite emoji on knuckle?|Nope",
-      "Live tweet grocery drama?|Plot Twist",
-      "Propose via pizza delivery?|Friend Veto",
-      "Invest rent in glow socks?|Rewind"
+    const answers = [
+      { text: "YOLO", emoji: "🚀" },
+      { text: "Nope", emoji: "🚫" },
+      { text: "Plot Twist", emoji: "🎭" },
+      { text: "Friend Veto", emoji: "👎" },
+      { text: "Rewind", emoji: "⏪" },
+      { text: "Do it for the 'Gram", emoji: "📸" },
+      { text: "Ask your mom", emoji: "🤷‍♂️" },
+      { text: "Spin again", emoji: "🔄" },
+      { text: "Only if you’re drunk", emoji: "🍺" },
+      { text: "100% YES", emoji: "✅" },
+      { text: "Never in a million years", emoji: "⏳" },
+      { text: "Let the cat decide", emoji: "🐱" },
+      { text: "Only on a Tuesday", emoji: "📅" },
+      { text: "Sell everything", emoji: "💸" },
+      { text: "Call in sick", emoji: "🤒" },
+      { text: "Blame Mercury retrograde", emoji: "☿" },
+      { text: "Do it naked", emoji: "🩲" },
+      { text: "Send it to your ex", emoji: "💔" },
+      { text: "Live stream it", emoji: "📹" },
+      { text: "Absolutely not", emoji: "❌" }
     ];
 
-    const spinBtn = document.getElementById('spin');
-    const resultDiv = document.getElementById('result');
-    const promptDiv = document.getElementById('prompt');
-    const outcomeDiv = document.getElementById('outcome');
-
-    spinBtn.addEventListener('click', () => {
-      const [p, o] = prompts[Math.floor(Math.random() * prompts.length)].split('|');
-      promptDiv.textContent = p;
-      outcomeDiv.textContent = o;
-      resultDiv.classList.remove('show');
-      setTimeout(() => resultDiv.classList.add('show'), 100);
-    });
-
-    function share(platform) {
-      const p = promptDiv.textContent || "Spin for chaos!";
-      const o = outcomeDiv.textContent || "Try it!";
-      const url = window.location.href;
-      const message = `I just spun "${p}" → ${o} on Chaos Wheel! ${url} #ChaosWheel`;
-      let shareUrl = '';
-      if (platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
-      if (platform === 'reddit') shareUrl = `https://www.reddit.com/submit?title=${encodeURIComponent(p)}&text=${encodeURIComponent(message)}`;
-      if (platform === 'tiktok') shareUrl = `https://www.tiktok.com/upload?text=${encodeURIComponent(message)}`;
-      window.open(shareUrl, '_blank');
-    }
-  </script>
-</body>
-</html>
+    const spin
