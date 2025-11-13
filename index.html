@@ -7,7 +7,7 @@
   <meta name="description" content="Chaos Wheel: Ask any life question, get real advice + funny twist with emojis! 3 free spins, then $0.99 for life.">
   <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions, emoji reactions">
   <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — 3 Free Spins!</title>
+  <title>Chaos Wheel — Ask Anything</title>
   <link rel="manifest" href="data:application/manifest+json,{
     \"name\": \"Chaos Wheel\",
     \"short_name\": \"Chaos\",
@@ -25,15 +25,17 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; overflow-y:auto; padding:15px 10px; }
     h1 { font-size:32px; margin:10px; text-shadow:0 0 15px #ff0044; }
+    .intro { font-size:18px; margin:10px; color:#ccc; }
     .wheel-container { display:flex; align-items:center; justify-content:center; margin:10px 0; }
-    .emoji-left, .emoji-right { font-size:40px; cursor:pointer; transition:0.3s; }
+    .emoji-left, .emoji-right { font-size:40px; cursor:pointer; transition:0.3s; margin:0 10px; }
     .emoji-left:hover, .emoji-right:hover { transform:scale(1.2); }
     .wheel-svg { width:80px; height:80px; animation:spin 3s linear infinite; }
     @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
     #input { width:90%; max-width:320px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:10px; }
-    #spin { background:#ff0044; color:white; border:none; padding:12px 35px; font-size:24px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:10px; }
+    .spin-row { display:flex; align-items:center; justify-content:center; margin:10px; }
+    #spin { background:#ff0044; color:white; border:none; padding:12px 35px; font-size:24px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:0 5px; }
     #spin:hover { transform:scale(1.1); box-shadow:0 0 30px #ff0044; }
-    #result { margin:15px 0 5px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
+    #result { margin:10px 0 5px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
     #result.show { opacity:1; }
     #real { font-size:18px; margin:5px; color:#ccc; }
     #funny { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
@@ -50,6 +52,7 @@
 </head>
 <body>
   <h1>CHAOS WHEEL</h1>
+  <div class="intro">Ask a question or let fate decide</div>
   <div class="wheel-container">
     <div class="emoji-left" id="emoji-left">🎲</div>
     <svg class="wheel-svg" viewBox="0 0 100 100">
@@ -63,7 +66,9 @@
     <div class="emoji-right" id="emoji-right">🎯</div>
   </div>
   <input id="input" type="text" placeholder="Ask your life decision..." />
-  <button id="spin">SPIN</button>
+  <div class="spin-row">
+    <button id="spin">SPIN</button>
+  </div>
   <div class="spins">Spins left: <span id="spins">3</span>/3 (free)</div>
   <div id="result">
     <div id="prompt"></div>
