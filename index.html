@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Ask any life question, get a random funny answer with emojis!">
-  <meta name="keywords" content="chaos wheel, random decision, life advice, funny answers, emoji reactions">
+  <meta name="description" content="Chaos Wheel: Ask any life question, get real advice + funny twist with emojis!">
+  <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions, emoji reactions">
   <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — Ask Anything</title>
+  <title>Chaos Wheel — Real + Funny Advice</title>
   <link rel="manifest" href="data:application/manifest+json,{
     \"name\": \"Chaos Wheel\",
     \"short_name\": \"Chaos\",
@@ -30,17 +30,18 @@
     #input { width:80%; max-width:300px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:15px; }
     #spin { background:#ff0044; color:white; border:none; padding:15px 40px; font-size:28px; font-weight:bold; border-radius:50px; cursor:pointer; box-shadow:0 0 20px #ff0044; transition:0.3s; margin:10px; }
     #spin:hover { transform:scale(1.1); box-shadow:0 0 30px #ff0044; }
-    #result { margin:20px; font-size:24px; min-height:60px; opacity:0; transition:opacity 0.5s; }
+    #result { margin:20px; font-size:24px; min-height:80px; opacity:0; transition:opacity 0.5s; }
     #result.show { opacity:1; }
-    #outcome { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
+    #real { font-size:18px; margin:5px; color:#ccc; }
+    #funny { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
     .emoji { font-size:60px; margin:10px; animation:bounce 1s; }
     @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-20px); } }
-    .disclaimer { margin:20px; font-size:14px; max-width:300px; background:#111; padding:15px; border-radius:10px; border:1px solid #333; }
-    .share { margin:20px; display:flex; gap:10px; }
-    .share button { background:#333; color:white; padding:10px 15px; border:none; border-radius:20px; cursor:pointer; font-size:14px; }
+    .disclaimer { margin:20px; font-size:12px; max-width:300px; background:#111; padding:10px; border-radius:5px; border:1px solid #333; position:absolute; bottom:10px; }
+    .share { margin:10px; display:flex; gap:10px; }
+    .share button { background:#333; color:white; padding:8px 12px; border:none; border-radius:20px; cursor:pointer; font-size:12px; }
     .share button:hover { background:#555; }
-    .unlock { margin:20px; }
-    .unlock button { background:#ffd700; color:black; padding:10px 20px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; }
+    .unlock { margin:10px; }
+    .unlock button { background:#ffd700; color:black; padding:8px 15px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; font-size:14px; }
   </style>
 </head>
 <body>
@@ -50,66 +51,68 @@
   <button id="spin">SPIN</button>
   <div id="result">
     <div id="prompt"></div>
+    <div id="real"></div>
     <div id="emoji"></div>
-    <div id="outcome"></div>
-  </div>
-  <div class="disclaimer">
-    <strong>⚠️ LEGAL DISCLAIMER</strong><br>
-    Entertainment only. 18+. All spins are fictional. No liability for actions taken. You assume full responsibility. Creator not responsible for outcomes, emotional distress, or damages. Use at your own risk. By spinning, you agree to these terms.
+    <div id="funny"></div>
   </div>
   <div class="share">
-    <button onclick="share('x')">Share on X</button>
-    <button onclick="share('reddit')">Share on Reddit</button>
-    <button onclick="share('tiktok')">Share on TikTok</button>
+    <button onclick="share('x')">X</button>
+    <button onclick="share('reddit')">Reddit</button>
+    <button onclick="share('tiktok')">TikTok</button>
   </div>
   <div class="unlock">
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
       <input type="hidden" name="cmd" value="_s-xclick">
       <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
-      <button type="submit">UNLOCK UNLIMITED ($2.99)</button>
+      <button type="submit">UNLOCK ($2.99)</button>
     </form>
+  </div>
+  <div class="disclaimer">
+    <strong>⚠️ DISCLAIMER</strong><br>
+    Entertainment only. 18+. All answers are fictional. No liability. You assume full responsibility. Use at your own risk.
   </div>
 
   <script>
-    // 20+ Funny Answers with Emojis
     const answers = [
-      { text: "YOLO", emoji: "🚀" },
-      { text: "Nope", emoji: "🚫" },
-      { text: "Plot Twist", emoji: "🎭" },
-      { text: "Friend Veto", emoji: "👎" },
-      { text: "Rewind", emoji: "⏪" },
-      { text: "Do it for the 'Gram", emoji: "📸" },
-      { text: "Ask your mom", emoji: "🤷‍♂️" },
-      { text: "Spin again", emoji: "🔄" },
-      { text: "Only if you’re drunk", emoji: "🍺" },
-      { text: "100% YES", emoji: "✅" },
-      { text: "Never in a million years", emoji: "⏳" },
-      { text: "Let the cat decide", emoji: "🐱" },
-      { text: "Only on a Tuesday", emoji: "📅" },
-      { text: "Sell everything", emoji: "💸" },
-      { text: "Call in sick", emoji: "🤒" },
-      { text: "Blame Mercury retrograde", emoji: "☿" },
-      { text: "Do it naked", emoji: "🩲" },
-      { text: "Send it to your ex", emoji: "💔" },
-      { text: "Live stream it", emoji: "📹" },
-      { text: "Absolutely not", emoji: "❌" }
+      { real: "Yes, but plan carefully.", funny: "YOLO! Jump in blind! 🚀", emoji: "🚀" },
+      { real: "No, think it through.", funny: "Nope — run away screaming! 🚫", emoji: "🚫" },
+      { real: "Maybe — talk to someone.", funny: "Plot Twist: Do it tomorrow! 🎭", emoji: "🎭" },
+      { real: "Ask a friend first.", funny: "Friend Veto: They said NO! 👎", emoji: "👎" },
+      { real: "Try again later.", funny: "Rewind! Pretend it never happened! ⏪", emoji: "⏪" },
+      { real: "Do it if you're ready.", funny: "Do it for the 'Gram! 📸", emoji: "📸" },
+      { real: "Get more information.", funny: "Ask your mom — she knows! 🤷‍♂️", emoji: "🤷‍♂️" },
+      { real: "Spin again.", funny: "Spin again — the wheel is confused! 🔄", emoji: "🔄" },
+      { real: "Only if you're sure.", funny: "Only if you’re drunk! 🍺", emoji: "🍺" },
+      { real: "Yes — go for it.", funny: "100% YES — no regrets! ✅", emoji: "✅" },
+      { real: "Not now.", funny: "Never in a million years! ⏳", emoji: "⏳" },
+      { real: "Let fate decide.", funny: "Let the cat decide! 🐱", emoji: "🐱" },
+      { real: "Only on special days.", funny: "Only on a Tuesday! 📅", emoji: "📅" },
+      { real: "Save your money.", funny: "Sell everything! 💸", emoji: "💸" },
+      { real: "Take a break.", funny: "Call in sick! 🤒", emoji: "🤒" },
+      { real: "Blame the stars.", funny: "Blame Mercury retrograde! ☿", emoji: "☿" },
+      { real: "Keep it private.", funny: "Do it naked! 🩲", emoji: "🩲" },
+      { real: "Let it go.", funny: "Send it to your ex! 💔", emoji: "💔" },
+      { real: "Share with friends.", funny: "Live stream it! 📹", emoji: "📹" },
+      { real: "Absolutely not.", funny: "Absolutely not — ever! ❌", emoji: "❌" }
     ];
 
     const spinBtn = document.getElementById('spin');
     const input = document.getElementById('input');
     const resultDiv = document.getElementById('result');
     const promptDiv = document.getElementById('prompt');
+    const realDiv = document.getElementById('real');
     const emojiDiv = document.getElementById('emoji');
-    const outcomeDiv = document.getElementById('outcome');
+    const funnyDiv = document.getElementById('funny');
 
     spinBtn.addEventListener('click', () => {
       const question = input.value.trim() || "Spin for chaos!";
       const answer = answers[Math.floor(Math.random() * answers.length)];
       
       promptDiv.textContent = question;
+      realDiv.textContent = answer.real;
       emojiDiv.textContent = answer.emoji;
       emojiDiv.className = "emoji";
-      outcomeDiv.textContent = answer.text;
+      funnyDiv.textContent = answer.funny;
       
       resultDiv.classList.remove('show');
       setTimeout(() => resultDiv.classList.add('show'), 100);
@@ -117,10 +120,11 @@
 
     function share(platform) {
       const q = input.value.trim() || "a wild decision";
-      const a = outcomeDiv.textContent || "chaos";
+      const r = realDiv.textContent || "real advice";
+      const f = funnyDiv.textContent || "funny twist";
       const e = emojiDiv.textContent || "🎲";
       const url = window.location.href;
-      const message = `I asked Chaos Wheel: "${q}" → ${e} ${a}! ${url} #ChaosWheel`;
+      const message = `I asked Chaos Wheel: "${q}" → ${r} | ${e} ${f} ${url} #ChaosWheel`;
       let shareUrl = '';
       if (platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
       if (platform === 'reddit') shareUrl = `https://www.reddit.com/submit?title=${encodeURIComponent(q)}&text=${encodeURIComponent(message)}`;
