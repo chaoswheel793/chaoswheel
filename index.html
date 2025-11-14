@@ -153,7 +153,7 @@
     <option value="insult2">Playful Insult</option>
     <option value="hack2">Life Hack</option>
   </select>
-  <div class="spins">Spins left: <span id="spins">20</span>/20 (free)</span></div>
+  <div class="spins">Spins left: <span id="spins">20</span>/20 (free)</div>
   <div id="result">
     <div id="prompt"></div>
     <div id="real"></div>
@@ -166,21 +166,21 @@
     <button onclick="share('tiktok')">TikTok</button>
   </div>
   <div class="unlock">
-    <!-- PayPal Button (Replace with your ID) -->
+    <!-- PayPal Button (Replace with your full button code from PayPal) -->
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
       <input type="hidden" name="cmd" value="_s-xclick">
-      <input type="hidden" name="hosted_button_id" value="TEST_BUTTON_ID">
+      <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
       <button type="submit">PayPal ($0.99)</button>
     </form>
-    <!-- Gumroad Button (Replace with your link) -->
+    <!-- Gumroad Button (Replace with your product link) -->
     <a href="YOUR_GUMROAD_LINK" target="_blank" style="text-decoration:none;">
       <button>Gumroad ($0.99)</button>
     </a>
     <!-- Venmo Button (Replace with your @username) -->
-    <a href="https://venmo.com/YOUR_USERNAME" target="_blank" style="text-decoration:none;">
+    <a href="https://venmo.com/YOUR_USERNAME?txn=pay&amount=0.99&note=Chaos%20Wheel%20Unlimited" target="_blank" style="text-decoration:none;">
       <button>Venmo ($0.99)</button>
     </a>
-    <!-- Credit Card (Stripe — Replace with your key) -->
+    <!-- Credit Card (Stripe — Replace with your key and price ID) -->
     <button onclick="stripeCheckout()">Credit Card ($0.99)</button>
   </div>
   <div class="disclaimer">
@@ -189,7 +189,7 @@
 
   <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY'); // Replace with your Stripe key
+    const stripe = Stripe('pk_test_51YOUR_STRIPE_PUBLISHABLE_KEY'); // Replace with your Stripe key
 
     let spinsLeft = 20;
     const spinsDisplay = document.getElementById('spins');
@@ -328,7 +328,7 @@
     // Stripe Checkout (Credit Card)
     function stripeCheckout() {
       stripe.redirectToCheckout({
-        lineItems: [{ price: 'YOUR_STRIPE_PRICE_ID', quantity: 1 }],
+        lineItems: [{ price: 'price_1YOUR_STRIPE_PRICE_ID', quantity: 1 }],
         mode: 'payment',
         successUrl: window.location.href + '?success=true',
         cancelUrl: window.location.href + '?canceled=true',
