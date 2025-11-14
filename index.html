@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Pick a mode or ask your own! 20 free spins, then $0.99 for life.">
+  <meta name="description" content="Chaos Wheel: Choose Serious or Sarcastic, then tap the wheel! 20 free spins, then $0.99 for life.">
   <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions">
   <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — Pick or Ask!</title>
+  <title>Chaos Wheel — Serious or Sarcastic?</title>
   <link rel="manifest" href="data:application/manifest+json,{
     \"name\": \"Chaos Wheel\",
     \"short_name\": \"Chaos\",
@@ -26,11 +26,14 @@
     body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; overflow-y:auto; padding:15px 10px; }
     h1 { font-size:32px; margin:10px; text-shadow:0 0 15px #ff0044; }
     .intro { font-size:18px; margin:10px; color:#ccc; }
+    .mode-row { display:flex; justify-content:center; align-items:center; gap:15px; margin:10px; }
+    .mode-btn { background:#333; color:white; border:2px solid #ff0044; padding:8px 16px; border-radius:30px; cursor:pointer; font-size:16px; transition:0.3s; }
+    .mode-btn.active { background:#ff0044; }
+    .mode-btn:hover { transform:scale(1.05); }
     #wheel { width:120px; height:120px; cursor:pointer; animation:spin 3s linear infinite; transition:0.3s; margin:10px 0; }
     #wheel:hover { transform:scale(1.1); }
     @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
     #input { width:90%; max-width:320px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:10px; }
-    #mode-select { width:90%; max-width:320px; padding:10px; font-size:16px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; margin:10px; }
     #result { margin:10px 0 5px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
     #result.show { opacity:1; }
     #real { font-size:18px; margin:5px; color:#ccc; }
@@ -48,70 +51,21 @@
 </head>
 <body>
   <h1>CHAOS WHEEL</h1>
-  <div class="intro">Pick a mode or ask your own!</div>
-  <svg id="wheel" viewBox="0 0 100 100">
-    <circle cx="50" cy="50" r="45" fill="none" stroke="#ff0044" stroke-width="8"/>
-    <path d="M50,5 L45,20 L55,20 Z" fill="#39ff14"/>
-    <path d="M95,50 L80,45 L80,55 Z" fill="#ffd700"/>
-    <path d="M50,95 L45,80 L55,80 Z" fill="#ff0044"/>
-    <path d="M5,50 L20,45 L20,55 Z" fill="#00ffff"/>
-    <circle cx="50" cy="50" r="15" fill="#000" stroke="#fff" stroke-width="3"/>
-    <text x="50" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">SPIN</text>
-  </svg>
-  <input id="input" type="text" placeholder="Ask your own question..." style="display:none;" />
-  <select id="mode-select">
-    <option value="">Pick a mode or type your own...</option>
-    <option value="normal">Ask Anything</option>
-    <option value="fortune">Fortune Teller</option>
-    <option value="dare">Daily Dare</option>
-    <option value="roulette">Question Roulette</option>
-    <option value="mystery">Mystery Mode</option>
-    <option value="truth">Truth or Chaos</option>
-    <option value="emoji">Emoji Responses</option>
-    <option value="time">Time Travel</option>
-    <option value="challenge">Chaos Challenge</option>
-    <option value="points">Chaos Points</option>
-    <option value="mood">Mood Match</option>
-    <option value="chat">Chaos Chat</option>
-    <option value="daily">Daily Chaos</option>
-    <option value="poll">Chaos Poll</option>
-    <option value="spinoff">Spin-Off</option>
-    <option value="quote">Chaos Quote</option>
-    <option value="trivia">Chaos Trivia</option>
-    <option value="story">Chaos Story</option>
-    <option value="confess">Chaos Confession</option>
-    <option value="meme">Chaos Meme</option>
-    <option value="sound">Chaos Soundboard</option>
-    <option value="art">Chaos Art</option>
-    <option value="lyrics">Chaos Lyrics</option>
-    <option value="recipe">Chaos Recipe</option>
-    <option value="travel">Chaos Travel</option>
-    <option value="fashion">Chaos Fashion</option>
-    <option value="workout">Chaos Workout</option>
-    <option value="poetry">Chaos Poetry</option>
-    <option value="joke">Chaos Joke</option>
-    <option value="predict">Chaos Prediction</option>
-    <option value="horoscope">Chaos Horoscope</option>
-    <option value="weather">Chaos Weather</option>
-    <option value="shopping">Chaos Shopping</option>
-    <option value="dating">Chaos Dating</option>
-    <option value="news">Chaos News</option>
-    <option value="history">Chaos History</option>
-    <option value="science">Chaos Science</option>
-    <option value="pet">Chaos Pet</option>
-    <option value="diy">Chaos DIY</option>
-    <option value="food">Chaos Food</option>
-    <option value="music">Chaos Music</option>
-    <option value="dream">Chaos Dream</option>
-    <option value="personality">Chaos Personality</option>
-    <option value="fortune">Chaos Fortune</option>
-    <option value="bucket">Chaos Bucket</option>
-    <option value="packing">Chaos Packing</option>
-    <option value="superpower">Chaos Superpower</option>
-    <option value="compliment">Chaos Compliment</option>
-    <option value="insult">Chaos Insult</option>
-    <option value="hack">Chaos Life Hack</option>
-  </select>
+  <div class="intro">Choose serious or sarcastic, then tap the wheel & get my reply</div>
+  <div class="mode-row">
+    <button class="mode-btn active" id="serious">SERIOUS</button>
+    <svg id="wheel" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff0044" stroke-width="8"/>
+      <path d="M50,5 L45,20 L55,20 Z" fill="#39ff14"/>
+      <path d="M95,50 L80,45 L80,55 Z" fill="#ffd700"/>
+      <path d="M50,95 L45,80 L55,80 Z" fill="#ff0044"/>
+      <path d="M5,50 L20,45 L20,55 Z" fill="#00ffff"/>
+      <circle cx="50" cy="50" r="15" fill="#000" stroke="#fff" stroke-width="3"/>
+      <text x="50" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">SPIN</text>
+    </svg>
+    <button class="mode-btn" id="sarcastic">SARCASTIC</button>
+  </div>
+  <input id="input" type="text" placeholder="Ask your life decision..." />
   <div class="spins">Spins left: <span id="spins">20</span>/20 (free)</div>
   <div id="result">
     <div id="prompt"></div>
@@ -139,8 +93,22 @@
     let spinsLeft = 20;
     const spinsDisplay = document.getElementById('spins');
     const unlockBtn = document.querySelector('.unlock button');
-    const input = document.getElementById('input');
-    const modeSelect = document.getElementById('mode-select');
+    let mode = 'serious'; // default
+
+    const seriousBtn = document.getElementById('serious');
+    const sarcasticBtn = document.getElementById('sarcastic');
+
+    seriousBtn.addEventListener('click', () => {
+      mode = 'serious';
+      seriousBtn.classList.add('active');
+      sarcasticBtn.classList.remove('active');
+    });
+
+    sarcasticBtn.addEventListener('click', () => {
+      mode = 'sarcastic';
+      sarcasticBtn.classList.add('active');
+      seriousBtn.classList.remove('active');
+    });
 
     // Anti-cheat: Fingerprint + IP
     function getFingerprint() {
@@ -161,82 +129,36 @@
     if (saved) spinsLeft = parseInt(saved);
     spinsDisplay.textContent = spinsLeft;
 
-    const answers = {
-      normal: { real: "Yes — if you have 6 months of savings and a plan.", funny: "YOLO! Quit today and live in a van!", emoji: "🚀" },
-      fortune: { real: "The stars align in your favor.", funny: "You will meet a tall, dark stranger... who steals your wallet!", emoji: "🔮" },
-      dare: { real: "Do 10 push-ups right now.", funny: "Eat a spoonful of hot sauce!", emoji: "💪" },
-      roulette: { real: "What is your biggest fear?", funny: "Would you rather fight 100 duck-sized horses or 1 horse-sized duck?", emoji: "🎲" },
-      mystery: { real: "The answer lies within.", funny: "It's behind you... RUN!", emoji: "🕵️" },
-      truth: { real: "Tell the truth or face the chaos.", funny: "Truth: You snore. Dare: Sing in public!", emoji: "🤐" },
-      emoji: { real: "👍", funny: "🤪", emoji: "🤯" },
-      time: { real: "In 2050, AI will rule.", funny: "In 1850, you'd be a pirate!", emoji: "⏰" },
-      challenge: { real: "Complete 5 tasks to unlock.", funny: "Dance like no one's watching!", emoji: "🏆" },
-      points: { real: "You earned 10 Chaos Points!", funny: "Spend them on... nothing!", emoji: "⭐" },
-      mood: { real: "You're feeling adventurous.", funny: "Time to conquer the world!", emoji: "😎" },
-      chat: { real: "Hello, human.", funny: "Why so serious?", emoji: "💬" },
-      daily: { real: "Today's chaos: Embrace the unknown.", funny: "Wear socks with sandals!", emoji: "🌟" },
-      poll: { real: "Should pineapple be on pizza?", funny: "Yes — fight me!", emoji: "🍍" },
-      spinoff: { real: "Try Chaos Dice next!", funny: "Roll for initiative!", emoji: "🎲" },
-      quote: { real: "The only way out is through.", funny: "Life is short — eat dessert first!", emoji: "💭" },
-      trivia: { real: "The Earth is round.", funny: "Actually, it's a donut!", emoji: "🌍" },
-      story: { real: "Once upon a time...", funny: "...and then the dragon burped!", emoji: "📖" },
-      confess: { real: "Your secret is safe.", funny: "I once ate a whole pizza alone!", emoji: "🤫" },
-      meme: { real: "This is fine.", funny: "Doge approves!", emoji: "😂" },
-      sound: { real: "Play victory sound!", funny: "Airhorn!", emoji: "🔊" },
-      art: { real: "Abstract chaos.", funny: "My toddler could do better!", emoji: "🎨" },
-      lyrics: { real: "In the chaos, we find peace.", funny: "Baby shark, doo doo doo!", emoji: "🎵" },
-      recipe: { real: "Mix flour, eggs, milk.", funny: "Add glitter for sparkle!", emoji: "🍳" },
-      travel: { real: "Visit Paris.", funny: "Go to Narnia!", emoji: "✈️" },
-      fashion: { real: "Wear what makes you confident.", funny: "Socks with sandals!", emoji: "👗" },
-      workout: { real: "Do 30 minutes of cardio.", funny: "Dance like a robot!", emoji: "💪" },
-      poetry: { real: "Roses are red, violets are blue.", funny: "Chaos is coming, what will you do?", emoji: "🌹" },
-      joke: { real: "Why did the chicken cross the road?", funny: "To get to the chaos!", emoji: "🐔" },
-      predict: { real: "You will have a great day.", funny: "Or a pizza!", emoji: "🔮" },
-      horoscope: { real: "The stars are aligned.", funny: "Avoid black cats!", emoji: "♈" },
-      weather: { real: "Sunny with a chance of clouds.", funny: "100% chance of chaos!", emoji: "☀️" },
-      shopping: { real: "Buy what you need.", funny: "Buy a pet rock!", emoji: "🛒" },
-      dating: { real: "Be yourself.", funny: "Bring a clown nose!", emoji: "❤️" },
-      news: { real: "Breaking: Local man finds peace.", funny: "Aliens invade — again!", emoji: "📰" },
-      history: { real: "In 1492, Columbus sailed.", funny: "He was looking for pizza!", emoji: "📜" },
-      science: { real: "E=mc²", funny: "Energy = milk × chaos²", emoji: "⚗️" },
-      pet: { real: "Feed your pet daily.", funny: "Teach it to fetch your socks!", emoji: "🐶" },
-      diy: { real: "Follow the instructions.", funny: "Use duct tape!", emoji: "🔨" },
-      food: { real: "Pizza + pineapple = controversial.", funny: "Try ice cream + fries!", emoji: "🍕" },
-      music: { real: "Listen to your favorite song.", funny: "Yodel in the shower!", emoji: "🎶" },
-      dream: { real: "Dreams reflect subconscious.", funny: "You were a superhero!", emoji: "💭" },
-      personality: { real: "You are unique.", funny: "You're 80% chaos, 20% coffee!", emoji: "🧠" },
-      fortune: { real: "Good luck is coming.", funny: "You will find $5!", emoji: "🍪" },
-      bucket: { real: "Add 'visit Paris'.", funny: "Add 'ride a unicorn'!", emoji: "🪣" },
-      packing: { real: "Pack light.", funny: "Pack a rubber duck!", emoji: "🧳" },
-      superpower: { real: "You have inner strength.", funny: "You can talk to plants!", emoji: "🦸" },
-      compliment: { real: "You are kind.", funny: "You're cooler than a polar bear!", emoji: "😊" },
-      insult: { real: "Everyone has flaws.", funny: "You're so slow, you got lapped by a snail!", emoji: "😜" },
-      hack: { real: "Use a planner.", funny: "Use a pizza box as a desk!", emoji: "💡" }
-    };
+    const answers = [
+      { real: "Yes — if you have 6 months of savings and a plan.", funny: "YOLO! Quit today and live in a van!", emoji: "🚀" },
+      { real: "No — unless you have another job lined up.", funny: "Nope — run away screaming and hide under your desk!", emoji: "🚫" },
+      { real: "Only if it's toxic and affecting your health.", funny: "Plot Twist: Do it tomorrow... or never!", emoji: "🎭" },
+      { real: "Talk to HR or a mentor first.", funny: "Friend Veto: They said NO and laughed!", emoji: "👎" },
+      { real: "Update your resume and network quietly.", funny: "Rewind! Pretend it never happened!", emoji: "⏪" },
+      { real: "Negotiate a raise or better role first.", funny: "Do it for the 'Gram — go viral!", emoji: "📸" },
+      { real: "Freelance on the side to test the waters.", funny: "Ask your mom — she knows everything!", emoji: "🤷‍♂️" },
+      { real: "Spin again for a second opinion.", funny: "Spin again — the wheel is confused too!", emoji: "🔄" },
+      { real: "Only if you have a clear path forward.", funny: "Only if you’re drunk and it’s Friday!", emoji: "🍺" },
+      { real: "Yes — if you're passionate and skilled.", funny: "100% YES — no regrets, just chaos!", emoji: "✅" },
+      { real: "Wait until you have a financial cushion.", funny: "Never in a million years — or maybe next week!", emoji: "⏳" },
+      { real: "Let your values guide you.", funny: "Let the cat decide — it’s smarter!", emoji: "🐱" },
+      { real: "Only when the timing feels right.", funny: "Only on a Tuesday — it’s the law!", emoji: "📅" },
+      { real: "Invest in index funds, not single stocks.", funny: "Sell everything and buy a pet rock!", emoji: "💸" },
+      { real: "Take a mental health day if needed.", funny: "Call in sick and binge Netflix!", emoji: "🤒" },
+      { real: "Astrology is entertainment, not science.", funny: "Blame Mercury retrograde — it’s always guilty!", emoji: "☿" },
+      { real: "Keep personal matters private.", funny: "Do it naked — no one will know!", emoji: "🩲" },
+      { real: "Move on — closure is overrated.", funny: "Send it to your ex with a smiley face!", emoji: "💔" },
+      { real: "Share with trusted friends.", funny: "Live stream it — go viral!", emoji: "📹" },
+      { real: "No — protect your peace.", funny: "Absolutely not — ever, ever, ever!", emoji: "❌" }
+    ];
 
     const wheel = document.getElementById('wheel');
+    const input = document.getElementById('input');
     const resultDiv = document.getElementById('result');
     const promptDiv = document.getElementById('prompt');
     const realDiv = document.getElementById('real');
     const emojiDiv = document.getElementById('emoji');
     const funnyDiv = document.getElementById('funny');
-
-    // Toggle input/mode
-    input.addEventListener('input', () => {
-      if (input.value.trim()) {
-        modeSelect.style.display = 'none';
-      } else {
-        modeSelect.style.display = 'block';
-      }
-    });
-
-    modeSelect.addEventListener('change', () => {
-      if (modeSelect.value) {
-        input.style.display = 'none';
-      } else {
-        input.style.display = 'block';
-      }
-    });
 
     wheel.addEventListener('click', () => {
       if (spinsLeft <= 0) {
@@ -244,15 +166,19 @@
         return;
       }
 
-      const question = input.value.trim() || modeSelect.options[modeSelect.selectedIndex].text;
-      const mode = modeSelect.value || 'normal';
-      const answer = answers[mode] || answers.normal;
+      const question = input.value.trim() || "Spin for chaos!";
+      const answer = answers[Math.floor(Math.random() * answers.length)];
       
       promptDiv.textContent = question;
-      realDiv.textContent = answer.real;
+      if (mode === 'serious') {
+        realDiv.textContent = answer.real;
+        funnyDiv.textContent = "";
+      } else {
+        realDiv.textContent = "";
+        funnyDiv.textContent = answer.funny;
+      }
       emojiDiv.textContent = answer.emoji;
       emojiDiv.className = "emoji-result";
-      funnyDiv.textContent = answer.funny;
       
       resultDiv.classList.remove('show');
       setTimeout(() => resultDiv.classList.add('show'), 100);
@@ -266,12 +192,11 @@
     });
 
     function share(platform) {
-      const q = input.value.trim() || modeSelect.options[modeSelect.selectedIndex].text;
-      const r = realDiv.textContent || "real advice";
-      const f = funnyDiv.textContent || "funny twist";
+      const q = input.value.trim() || "a wild decision";
+      const r = realDiv.textContent || funnyDiv.textContent || "chaos";
       const e = emojiDiv.textContent || "🎲";
       const url = window.location.href;
-      const message = `I asked Chaos Wheel: "${q}" → ${r} | ${e} ${f} ${url} #ChaosWheel`;
+      const message = `I asked Chaos Wheel: "${q}" → ${r} ${e} ${url} #ChaosWheel`;
       let shareUrl = '';
       if (platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
       if (platform === 'reddit') shareUrl = `https://www.reddit.com/submit?title=${encodeURIComponent(q)}&text=${encodeURIComponent(message)}`;
