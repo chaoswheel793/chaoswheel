@@ -2,262 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: 100 modes! 20 free spins, then $0.99 for life. PayPal, Gumroad, Venmo, Credit Card.">
-  <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions, payments">
-  <meta name="robots" content="index, follow">
-  <title>Chaos Wheel — 100 Modes!</title>
-  <link rel="manifest" href="data:application/manifest+json,{
-    \"name\": \"Chaos Wheel\",
-    \"short_name\": \"Chaos\",
-    \"start_url\": \".\",
-    \"display\": \"standalone\",
-    \"background_color\": \"#000\",
-    \"theme_color\": \"#ff0044\",
-    \"icons\": [{
-      \"src\": \"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff0044'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='40' fill='white' text-anchor='middle'%3E?%3C/text%3E%3C/svg%3E\",
-      \"sizes\": \"192x192\",
-      \"type\": \"image/svg+xml\"
-    }]
-  }"/>
-  <script src="https://js.stripe.com/v3/"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Chaos Carver — 3D Carving Game</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:white; font-family:'Courier New',monospace; text-align:center; height:100vh; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; overflow-y:auto; padding:15px 10px; }
-    h1 { font-size:32px; margin:10px; text-shadow:0 0 15px #ff0044; }
-    .intro { font-size:18px; margin:10px; color:#ccc; }
-    .mode-row { display:flex; justify-content:center; align-items:center; gap:15px; margin:10px; }
-    .mode-btn { background:#333; color:white; border:2px solid #ff0044; padding:8px 16px; border-radius:30px; cursor:pointer; font-size:16px; transition:0.3s; }
-    .mode-btn.active { background:#ff0044; }
-    .mode-btn:hover { transform:scale(1.05); }
-    #wheel { width:120px; height:120px; cursor:pointer; animation:spin 3s linear infinite; transition:0.3s; margin:10px 0; }
-    #wheel:hover { transform:scale(1.1); }
-    @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
-    #input { width:90%; max-width:320px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:10px; }
-    #mode-select { width:90%; max-width:320px; padding:10px; font-size:16px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; margin:10px; }
-    #result { margin:10px 0 5px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
-    #result.show { opacity:1; }
-    #real { font-size:18px; margin:5px; color:#ccc; }
-    #funny { color:#39ff14; font-weight:bold; text-shadow:0 0 10px #39ff14; }
-    .spins { margin:8px; font-size:16px; color:#aaa; }
-    .unlock { margin:8px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-    .unlock button, .unlock a button { background:#ffd700; color:#000; padding:6px 12px; border:none; border-radius:20px; font-weight:bold; cursor:pointer; font-size:13px; margin:2px; text-decoration:none; }
-    .disclaimer { margin:15px 0; font-size:11px; width:95%; max-width:500px; background:#111; padding:8px; border-radius:8px; border:1px solid #333; line-height:1.3; }
-    .share { margin:8px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-    .share button { background:#333; color:white; padding:6px 10px; border:none; border-radius:20px; cursor:pointer; font-size:11px; }
-    .share button:hover { background:#555; }
+    body { background:#1a1a1a; overflow:hidden; font-family:'Courier New',monospace; touch-action:none; }
+    #scene { perspective:1000px; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; }
+    #block-container { transform-style:preserve-3d; width:200px; height:200px; position:relative; }
+    .face { position:absolute; width:200px; height:200px; background:#D4A574; border:3px solid #8B5A2B; box-shadow:inset 0 0 20px rgba(0,0,0,0.3); }
+    .face.front  { transform:translateZ(100px); }
+    .face.back   { transform:rotateY(180deg) translateZ(100px); }
+    .face.right  { transform:rotateY(90deg) translateZ(100px); }
+    .face.left   { transform:rotateY(-90deg) translateZ(100px); }
+    .face.top    { transform:rotateX(90deg) translateZ(100px); }
+    .face.bottom { transform:rotateX(-90deg) translateZ(100px); }
+
+    /* OUTLINES */
+    .outline { position:absolute; border:3px dashed #00f; pointer-events:none; }
+    .front .outline  { width:140px; height:120px; top:40px; left:30px; clip-path:polygon(30% 0%, 70% 0%, 85% 30%, 75% 60%, 60% 100%, 40% 100%, 25% 60%, 15% 30%); }
+    .top .outline    { width:140px; height:140px; top:30px; left:30px; clip-path:ellipse(50% 40% at 50% 50%); }
+    .side .outline   { width:120px; height:160px; top:20px; left:40px; clip-path:polygon(40% 0%, 60% 0%, 80% 40%, 70% 80%, 50% 100%, 30% 80%, 20% 40%); }
+
+    /* HANDS & CHISEL */
+    #hands { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); pointer-events:none; z-index:10; }
+    .hand { width:60px; height:100px; background:#F4C2A1; border-radius:30px 30px 10px 10px; position:absolute; bottom:0; }
+    .hand.left { left:-50px; transform:rotate(-20deg); }
+    .hand.right { left:10px; transform:rotate(20deg); }
+    .chisel { width:8px; height:80px; background:linear-gradient(#ccc, #aaa); position:absolute; bottom:80px; left:50%; transform:translateX(-50%) rotate(45deg); border-radius:4px 4px 0 0; box-shadow:0 0 10px rgba(0,0,0,0.5); }
+    .chisel::after { content:''; width:20px; height:20px; background:#666; position:absolute; bottom:-10px; left:-6px; border-radius:50%; }
+
+    /* PARTICLES */
+    .particle { position:absolute; width:6px; height:6px; background:#D4A574; border-radius:50%; pointer-events:none; animation:fall 1s linear forwards; }
+    @keyframes fall { to { transform:translateY(300px) rotate(720deg); opacity:0; } }
+
+    #ui { position:absolute; top:20px; left:20px; color:#fff; font-size:14px; }
+    #rotate-hint { position:absolute; bottom:20px; width:100%; text-align:center; color:#aaa; font-size:12px; }
   </style>
 </head>
 <body>
-  <h1>CHAOS WHEEL</h1>
-  <div class="intro">Choose serious or sarcastic, then tap the wheel & get my reply</div>
-  <div class="mode-row">
-    <button class="mode-btn active" id="serious">SERIOUS</button>
-    <svg id="wheel" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="45" fill="none" stroke="#ff0044" stroke-width="8"/>
-      <path d="M50,5 L45,20 L55,20 Z" fill="#39ff14"/>
-      <path d="M95,50 L80,45 L80,55 Z" fill="#ffd700"/>
-      <path d="M50,95 L45,80 L55,80 Z" fill="#ff0044"/>
-      <path d="M5,50 L20,45 L20,55 Z" fill="#00ffff"/>
-      <circle cx="50" cy="50" r="15" fill="#000" stroke="#fff" stroke-width="3"/>
-      <text x="50" y="55" font-family="Arial" font-size="24" fill="white" text-anchor="middle">SPIN</text>
-    </svg>
-    <button class="mode-btn" id="sarcastic">SARCASTIC</button>
+  <div id="scene">
+    <div id="block-container">
+      <div class="face front"><div class="outline"></div></div>
+      <div class="face back"><div class="outline side"></div></div>
+      <div class="face right"><div class="outline side"></div></div>
+      <div class="face left"><div class="outline side"></div></div>
+      <div class="face top"><div class="outline"></div></div>
+      <div class="face bottom"><div class="outline"></div></div>
+    </div>
+    <div id="hands">
+      <div class="hand left"></div>
+      <div class="hand right"></div>
+      <div class="chisel"></div>
+    </div>
   </div>
-  <input id="input" type="text" placeholder="Ask your own question..." />
-  <select id="mode-select">
-    <option value="">Pick a mode or type your own...</option>
-    <!-- 100 MODES (FULL LIST) -->
-    <option value="normal">Ask Anything</option>
-    <option value="fortune">Fortune Teller</option>
-    <option value="dare">Daily Dare</option>
-    <option value="roulette">Question Roulette</option>
-    <option value="mystery">Mystery Mode</option>
-    <option value="truth">Truth or Chaos</option>
-    <option value="time">Time Travel</option>
-    <option value="challenge">Chaos Challenge</option>
-    <option value="points">Chaos Points</option>
-    <option value="mood">Mood Match</option>
-    <option value="chat">Chaos Chat</option>
-    <option value="daily">Daily Chaos</option>
-    <option value="poll">Chaos Poll</option>
-    <option value="spinoff">Spin-Off</option>
-    <option value="quote">Chaos Quote</option>
-    <option value="trivia">Chaos Trivia</option>
-    <option value="story">Chaos Story</option>
-    <option value="confess">Chaos Confession</option>
-    <option value="meme">Chaos Meme</option>
-    <option value="art">Chaos Art</option>
-    <option value="lyrics">Chaos Lyrics</option>
-    <option value="recipe">Chaos Recipe</option>
-    <option value="travel">Chaos Travel</option>
-    <option value="fashion">Chaos Fashion</option>
-    <option value="workout">Chaos Workout</option>
-    <option value="poetry">Chaos Poetry</option>
-    <option value="joke">Chaos Joke</option>
-    <option value="predict">Chaos Prediction</option>
-    <option value="horoscope">Chaos Horoscope</option>
-    <option value="weather">Chaos Weather</option>
-    <option value="shopping">Chaos Shopping</option>
-    <option value="dating">Chaos Dating</option>
-    <option value="news">Chaos News</option>
-    <option value="history">Chaos History</option>
-    <option value="science">Chaos Science</option>
-    <option value="pet">Chaos Pet</option>
-    <option value="diy">Chaos DIY</option>
-    <option value="food">Chaos Food</option>
-    <option value="music">Chaos Music</option>
-    <option value="dream">Chaos Dream</option>
-    <option value="personality">Chaos Personality</option>
-    <option value="fortune">Chaos Fortune</option>
-    <option value="bucket">Chaos Bucket</option>
-    <option value="packing">Chaos Packing</option>
-    <option value="superpower">Chaos Superpower</option>
-    <option value="compliment">Chaos Compliment</option>
-    <option value="insult">Chaos Insult</option>
-    <option value="hack">Chaos Life Hack</option>
-    <!-- 50 NEW MODES -->
-    <option value="voice">Voice Mode</option>
-    <option value="sound">Soundboard</option>
-    <option value="meme2">Meme Generator</option>
-    <option value="art2">Abstract Art</option>
-    <option value="lyrics2">Song Lyrics</option>
-    <option value="recipe2">Quirky Recipe</option>
-    <option value="travel2">Chaotic Destination</option>
-    <option value="fashion2">Outfit Idea</option>
-    <option value="workout2">Fitness Dare</option>
-    <option value="poetry2">Poem</option>
-    <option value="joke2">Joke</option>
-    <option value="predict2">Prediction</option>
-    <option value="horoscope2">Horoscope</option>
-    <option value="weather2">Weather</option>
-    <option value="shopping2">Shopping</option>
-    <option value="dating2">Dating Advice</option>
-    <option value="news2">Fake News</option>
-    <option value="history2">History Fact</option>
-    <option value="science2">Science Theory</option>
-    <option value="pet2">Pet Advice</option>
-    <option value="diy2">DIY Project</option>
-    <option value="food2">Food Combo</option>
-    <option value="music2">Playlist</option>
-    <option value="dream2">Dream Interpreter</option>
-    <option value="personality2">Personality Quiz</option>
-    <option value="fortune2">Fortune Cookie</option>
-    <option value="bucket2">Bucket List</option>
-    <option value="packing2">Packing List</option>
-    <option value="superpower2">Superpower</option>
-    <option value="compliment2">Compliment</option>
-    <option value="insult2">Playful Insult</option>
-    <option value="hack2">Life Hack</option>
-  </select>
-  <div class="spins">Spins left: <span id="spins">20</span>/20 (free)</div>
-  <div id="result">
-    <div id="prompt"></div>
-    <div id="real"></div>
-    <div id="funny"></div>
-  </div>
-  <div class="share">
-    <button onclick="share('x')">X</button>
-    <button onclick="share('reddit')">Reddit</button>
-    <button onclick="share('tiktok')">TikTok</button>
-  </div>
-  <div class="unlock">
-    <!-- PAYPAL (TEST MODE - $0.01) -->
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-      <input type="hidden" name="cmd" value="_s-xclick">
-      <input type="hidden" name="hosted_button_id" value="TEST_BUTTON_ID">
-      <button type="submit">PayPal ($0.01 Test)</button>
-    </form>
-    <!-- GUMROAD (LIVE LINK) -->
-    <a href="https://gumroad.com/l/chaoswheel-unlimited" target="_blank" style="text-decoration:none;">
-      <button>Gumroad ($0.99)</button>
-    </a>
-    <!-- VENMO (LIVE @USERNAME) -->
-    <a href="https://venmo.com/chaoswheel793?txn=pay&amount=0.99&note=Chaos%20Wheel%20Unlimited" target="_blank" style="text-decoration:none;">
-      <button>Venmo ($0.99)</button>
-    </a>
-    <!-- CREDIT CARD (STRIPE TEST MODE) -->
-    <button onclick="stripeCheckout()">Credit Card ($0.00 Test)</button>
-  </div>
-  <div class="disclaimer">
-    <strong>⚠️ DISCLAIMER:</strong> Entertainment only. 18+. All answers fictional. No liability. Use at your own risk.
-  </div>
+  <div id="ui">Drag to rotate • Tap & drag to carve</div>
+  <div id="rotate-hint">Hold & drag to spin block</div>
 
-  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const stripe = Stripe('pk_test_51YOUR_TEST_KEY'); // Replace with real key for live
+    const container = document.getElementById('block-container');
+    const chisel = document.querySelector('.chisel');
+    const hands = document.getElementById('hands');
+    let isCarving = false;
+    let rotX = -25, rotY = 30;
 
-    let spinsLeft = 20;
-    const spinsDisplay = document.getElementById('spins');
-    let answerMode = 'serious';
+    // ROTATE BLOCK
+    let isDragging = false, startX, startY;
+    document.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; startY = e.clientY; });
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      rotY += (e.clientX - startX) * 0.5;
+      rotX -= (e.clientY - startY) * 0.5;
+      container.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      startX = e.clientX; startY = e.clientY;
+    });
+    document.addEventListener('mouseup', () => isDragging = false);
 
-    // TEMP TESTING: 999 spins for you
-    const TEMP_TESTING = true;
-    if (TEMP_TESTING) spinsLeft = 999;
+    // TOUCH SUPPORT
+    document.addEventListener('touchstart', e => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      e.preventDefault();
+    }, {passive:false});
+    document.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      rotY += (e.touches[0].clientX - startX) * 0.5;
+      rotX -= (e.touches[0].clientY - startY) * 0.5;
+      container.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      e.preventDefault();
+    }, {passive:false});
+    document.addEventListener('touchend', () => isDragging = false);
 
-    const seriousBtn = document.getElementById('serious');
-    const sarcasticBtn = document.getElementById('sarcastic');
-    const input = document.getElementById('input');
-    const modeSelect = document.getElementById('mode-select');
-
-    // Toggle answer mode
-    seriousBtn.addEventListener('click', () => {
-      answerMode = 'serious';
-      seriousBtn.classList.add('active');
-      sarcasticBtn.classList.remove('active');
+    // CARVE ON TAP/DRAG
+    document.addEventListener('pointerdown', e => {
+      if (e.target.closest('#wheel')) return;
+      isCarving = true;
+      hands.style.opacity = '1';
+      chisel.style.transform = 'translateX(-50%) rotate(60deg) scale(1.1)';
+    });
+    document.addEventListener('pointermove', e => {
+      if (!isCarving) return;
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left - 100;
+      const y = e.clientY - rect.top - 100;
+      chisel.style.left = '50%';
+      chisel.style.top = '60px';
+      createParticle(e.clientX, e.clientY);
+    });
+    document.addEventListener('pointerup', () => {
+      isCarving = false;
+      hands.style.opacity = '0.7';
+      chisel.style.transform = 'translateX(-50%) rotate(45deg) scale(1)';
     });
 
-    sarcasticBtn.addEventListener('click', () => {
-      answerMode = 'sarcastic';
-      sarcasticBtn.classList.add('active');
-      seriousBtn.classList.remove('active');
-    });
-
-    // Toggle input/mode
-    input.addEventListener('input', () => {
-      if (input.value.trim()) modeSelect.style.display = 'none';
-      else modeSelect.style.display = 'block';
-    });
-
-    modeSelect.addEventListener('change', () => {
-      if (modeSelect.value) input.style.display = 'none';
-      else input.style.display = 'block';
-    });
-
-    // Anti-cheat
-    function getFingerprint() {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = "#f60"; ctx.fillRect(125,1,62,20);
-      ctx.fillStyle = "#069"; ctx.fillText('Chaos', 2, 15);
-      return canvas.toDataURL() + navigator.userAgent;
+    function createParticle(x, y) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1000);
     }
-    const storageKey = `chaos_${btoa(getFingerprint()).slice(0,20)}`;
-    const saved = localStorage.getItem(storageKey);
-    if (saved) spinsLeft = parseInt(saved);
-    spinsDisplay.textContent = spinsLeft;
 
-    const answers = [ /* 100 answers - same as before */ ];
-
-    const wheel = document.getElementById('wheel');
-    wheel.addEventListener('click', () => {
-      if (spinsLeft <= 0) { alert("Out of spins!"); return; }
-      const q = input.value.trim() || modeSelect.options[modeSelect.selectedIndex].text;
-      const answer = answers[Math.floor(Math.random() * answers.length)];
-      document.getElementById('prompt').textContent = q;
-      document.getElementById('real').textContent = answerMode === 'serious' ? answer.real : "";
-      document.getElementById('funny').textContent = answerMode === 'sarcastic' ? answer.funny : "";
-      document.getElementById('result').classList.add('show');
-      spinsLeft--; spinsDisplay.textContent = spinsLeft;
-      localStorage.setItem(storageKey, spinsLeft);
-    });
-
-    function share(p) { /* share code */ }
-
-    function stripeCheckout() {
-      stripe.redirectToCheckout({ lineItems: [{ price: 'price_test', quantity: 1 }], mode: 'payment', successUrl: location.href, cancelUrl: location.href });
-    }
+    // INITIAL ROTATION
+    container.style.transform = `rotateX(-25deg) rotateY(30deg)`;
+    hands.style.opacity = '0.7';
   </script>
 </body>
 </html>
