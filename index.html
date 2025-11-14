@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#000000"/>
-  <meta name="description" content="Chaos Wheel: Choose Serious or Sarcastic, then tap the wheel! 20 free spins, then $0.99 for life.">
+  <meta name="description" content="Chaos Wheel: Pick a mode or ask your own! Choose Serious or Sarcastic. 20 free spins, then $0.99 for life.">
   <meta name="keywords" content="chaos wheel, real advice, funny answers, life decisions">
   <meta name="robots" content="index, follow">
   <title>Chaos Wheel — Serious or Sarcastic?</title>
@@ -34,6 +34,7 @@
     #wheel:hover { transform:scale(1.1); }
     @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
     #input { width:90%; max-width:320px; padding:12px; font-size:18px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; text-align:center; margin:10px; }
+    #mode-select { width:90%; max-width:320px; padding:10px; font-size:16px; border-radius:50px; border:2px solid #ff0044; background:#111; color:white; margin:10px; }
     #result { margin:10px 0 5px; font-size:22px; min-height:80px; opacity:0; transition:opacity 0.5s; width:90%; max-width:380px; }
     #result.show { opacity:1; }
     #real { font-size:18px; margin:5px; color:#ccc; }
@@ -65,7 +66,60 @@
     </svg>
     <button class="mode-btn" id="sarcastic">SARCASTIC</button>
   </div>
-  <input id="input" type="text" placeholder="Ask your life decision..." />
+  <input id="input" type="text" placeholder="Ask your own question..." />
+  <select id="mode-select">
+    <option value="">Pick a mode or type your own...</option>
+    <option value="normal">Ask Anything</option>
+    <option value="fortune">Fortune Teller</option>
+    <option value="dare">Daily Dare</option>
+    <option value="roulette">Question Roulette</option>
+    <option value="mystery">Mystery Mode</option>
+    <option value="truth">Truth or Chaos</option>
+    <option value="emoji">Emoji Responses</option>
+    <option value="time">Time Travel</option>
+    <option value="challenge">Chaos Challenge</option>
+    <option value="points">Chaos Points</option>
+    <option value="mood">Mood Match</option>
+    <option value="chat">Chaos Chat</option>
+    <option value="daily">Daily Chaos</option>
+    <option value="poll">Chaos Poll</option>
+    <option value="spinoff">Spin-Off</option>
+    <option value="quote">Chaos Quote</option>
+    <option value="trivia">Chaos Trivia</option>
+    <option value="story">Chaos Story</option>
+    <option value="confess">Chaos Confession</option>
+    <option value="meme">Chaos Meme</option>
+    <option value="sound">Chaos Soundboard</option>
+    <option value="art">Chaos Art</option>
+    <option value="lyrics">Chaos Lyrics</option>
+    <option value="recipe">Chaos Recipe</option>
+    <option value="travel">Chaos Travel</option>
+    <option value="fashion">Chaos Fashion</option>
+    <option value="workout">Chaos Workout</option>
+    <option value="poetry">Chaos Poetry</option>
+    <option value="joke">Chaos Joke</option>
+    <option value="predict">Chaos Prediction</option>
+    <option value="horoscope">Chaos Horoscope</option>
+    <option value="weather">Chaos Weather</option>
+    <option value="shopping">Chaos Shopping</option>
+    <option value="dating">Chaos Dating</option>
+    <option value="news">Chaos News</option>
+    <option value="history">Chaos History</option>
+    <option value="science">Chaos Science</option>
+    <option value="pet">Chaos Pet</option>
+    <option value="diy">Chaos DIY</option>
+    <option value="food">Chaos Food</option>
+    <option value="music">Chaos Music</option>
+    <option value="dream">Chaos Dream</option>
+    <option value="personality">Chaos Personality</option>
+    <option value="fortune">Chaos Fortune</option>
+    <option value="bucket">Chaos Bucket</option>
+    <option value="packing">Chaos Packing</option>
+    <option value="superpower">Chaos Superpower</option>
+    <option value="compliment">Chaos Compliment</option>
+    <option value="insult">Chaos Insult</option>
+    <option value="hack">Chaos Life Hack</option>
+  </select>
   <div class="spins">Spins left: <span id="spins">20</span>/20 (free)</div>
   <div id="result">
     <div id="prompt"></div>
@@ -93,21 +147,41 @@
     let spinsLeft = 20;
     const spinsDisplay = document.getElementById('spins');
     const unlockBtn = document.querySelector('.unlock button');
-    let mode = 'serious'; // default
+    let answerMode = 'serious'; // default
 
     const seriousBtn = document.getElementById('serious');
     const sarcasticBtn = document.getElementById('sarcastic');
+    const input = document.getElementById('input');
+    const modeSelect = document.getElementById('mode-select');
 
+    // Toggle answer mode
     seriousBtn.addEventListener('click', () => {
-      mode = 'serious';
+      answerMode = 'serious';
       seriousBtn.classList.add('active');
       sarcasticBtn.classList.remove('active');
     });
 
     sarcasticBtn.addEventListener('click', () => {
-      mode = 'sarcastic';
+      answerMode = 'sarcastic';
       sarcasticBtn.classList.add('active');
       seriousBtn.classList.remove('active');
+    });
+
+    // Toggle input/mode
+    input.addEventListener('input', () => {
+      if (input.value.trim()) {
+        modeSelect.style.display = 'none';
+      } else {
+        modeSelect.style.display = 'block';
+      }
+    });
+
+    modeSelect.addEventListener('change', () => {
+      if (modeSelect.value) {
+        input.style.display = 'none';
+      } else {
+        input.style.display = 'block';
+      }
     });
 
     // Anti-cheat: Fingerprint + IP
@@ -153,7 +227,6 @@
     ];
 
     const wheel = document.getElementById('wheel');
-    const input = document.getElementById('input');
     const resultDiv = document.getElementById('result');
     const promptDiv = document.getElementById('prompt');
     const realDiv = document.getElementById('real');
@@ -166,11 +239,11 @@
         return;
       }
 
-      const question = input.value.trim() || "Spin for chaos!";
+      const question = input.value.trim() || modeSelect.options[modeSelect.selectedIndex].text;
       const answer = answers[Math.floor(Math.random() * answers.length)];
       
       promptDiv.textContent = question;
-      if (mode === 'serious') {
+      if (answerMode === 'serious') {
         realDiv.textContent = answer.real;
         funnyDiv.textContent = "";
       } else {
@@ -192,7 +265,7 @@
     });
 
     function share(platform) {
-      const q = input.value.trim() || "a wild decision";
+      const q = input.value.trim() || modeSelect.options[modeSelect.selectedIndex].text;
       const r = realDiv.textContent || funnyDiv.textContent || "chaos";
       const e = emojiDiv.textContent || "🎲";
       const url = window.location.href;
